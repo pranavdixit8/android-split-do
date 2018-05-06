@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "279274571826",
+    "firebase_url": "https://splitdo-b7030.firebaseio.com",
+    "project_id": "splitdo-b7030",
+    "storage_bucket": "splitdo-b7030.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279274571826:android:f8d259527be545dc",
+        "android_client_info": {
+          "package_name": "com.example.pranav.splitdo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279274571826-bet1u94k6371j0anug2jinraidatelpp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.pranav.splitdo",
+            "certificate_hash": "903461a9bf55c5725329cf7c9c8f53cffd0a4e95"
+          }
+        },
+        {
+          "client_id": "279274571826-8lapi148dldmniutamttrjgjp6qthbvc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5T--PagBDdQfFr7cr2pVt0CfVaXzBTG0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279274571826-8lapi148dldmniutamttrjgjp6qthbvc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
