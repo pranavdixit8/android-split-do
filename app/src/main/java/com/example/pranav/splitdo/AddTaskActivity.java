@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -16,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class AddTaskActivity extends AppCompatActivity {
 
@@ -92,6 +95,28 @@ public class AddTaskActivity extends AppCompatActivity {
 
         });
 
+
+    }
+
+    public void onClickAddTask(View view) {
+
+        String input = ((EditText) findViewById(R.id.et_task_description)).getText().toString();
+        if (input.length() == 0) {
+            return;
+        }
+        GregorianCalendar cal = new GregorianCalendar();
+        SimpleDateFormat d = new SimpleDateFormat("dd MMM HH:mm", Locale.CANADA);
+
+        String time = d.format(cal.getTime());
+
+        Log.d(TAG, "onClickAddTask: " + d.format(cal.getTime()));
+
+
+        TaskObject taskObject = new TaskObject(input,time, null, null, null,null, null, null,null, null, null,"created",mPlaceId);
+
+        mDatabaseReference.push().setValue(taskObject);
+
+        finish();
 
     }
 }
