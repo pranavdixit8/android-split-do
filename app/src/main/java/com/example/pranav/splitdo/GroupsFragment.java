@@ -41,7 +41,7 @@ public class GroupsFragment extends Fragment {
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mGroupDatabaseReference = mFirebaseDatabase.getReference().child("users").child("groups");
+        mGroupDatabaseReference = mFirebaseDatabase.getReference().child("groups");
 
 
 

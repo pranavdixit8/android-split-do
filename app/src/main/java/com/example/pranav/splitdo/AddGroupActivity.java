@@ -14,6 +14,9 @@ import android.widget.LinearLayout;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddGroupActivity extends AppCompatActivity {
 
     public static final String TAG = AddGroupActivity.class.getSimpleName();
@@ -44,7 +47,7 @@ public class AddGroupActivity extends AppCompatActivity {
 
         mGroupDatabaseReference = mFirebaseDatabase.getReference().child("groups").push();
         mGroupMembersReference = mFirebaseDatabase.getReference().child("groups").child("members");
-        mGroupDatabaseReference =  mFirebaseDatabase.getReference().child("groups").child("groupInfo");
+
 
 
 
@@ -84,6 +87,21 @@ public class AddGroupActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    public void onClickAddGroup(View view) {
+        String input = ((EditText) findViewById(R.id.et_group_name)).getText().toString();
+
+        if (input.length() == 0) {
+            return;
+        }
+
+        GroupObject groupObject = new GroupObject(input,null, null, null, null, null);
+
+        mGroupDatabaseReference.setValue(groupObject);
+
+        finish();
 
     }
 }
