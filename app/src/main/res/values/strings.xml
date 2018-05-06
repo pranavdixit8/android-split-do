@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">split.do</string>
+    <string name="edit_task_description">Describe your task here</string>
+    <string name="with_group">With group: </string>
+    <string name="add_location">Add your task location</string>
+    <string name="add_button">Add</string>
+    <string name="add_icon">add sign</string>
+    <string name="location_icon">location sign</string>
+    <string name="no_group">None</string>
 </resources>
