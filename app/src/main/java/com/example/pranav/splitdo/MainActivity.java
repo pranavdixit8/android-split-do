@@ -40,6 +40,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         mGroupFab = (FloatingActionButton) findViewById(R.id.fab_add_group);
 
+        mGroupFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addTaskIntent = new Intent(MainActivity.this, AddGroupActivity.class);
+                startActivity(addTaskIntent);
+            }
+        });
+
 
         mTasksFab = (FloatingActionButton) findViewById(R.id.fab_add_task);
 

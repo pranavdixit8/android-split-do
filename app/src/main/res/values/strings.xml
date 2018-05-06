@@ -7,4 +7,8 @@
     <string name="add_icon">add sign</string>
     <string name="location_icon">location sign</string>
     <string name="no_group">None</string>
+    <string name="edit_group_name">Name your group</string>
+    <string name="add_members">Add members</string>
+    <string name="add_new_task">Add a new task</string>
+    <string name="add_new_group">Add a new group</string>
 </resources>
