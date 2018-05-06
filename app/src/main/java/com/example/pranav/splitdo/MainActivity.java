@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private FloatingActionButton mTasksFab;
 
     private PersonalTasksFragment mFragment1;
-    private PersonalTasksFragment mFragment2;
+    private GroupsFragment mFragment2;
 
 
     @Override
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
 
         mFragment1 = new PersonalTasksFragment();
-        mFragment2 = new PersonalTasksFragment();//placeholder for the time being
+        mFragment2 = new GroupsFragment();
 
 
         mGroupFab = (FloatingActionButton) findViewById(R.id.fab_add_group);

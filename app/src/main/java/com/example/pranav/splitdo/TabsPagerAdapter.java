@@ -6,14 +6,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
     private PersonalTasksFragment mFragment1;
-    private PersonalTasksFragment mFragment2;
+    private GroupsFragment mFragment2;
 
 
     public TabsPagerAdapter(FragmentManager fm){
         super(fm);
     }
 
-    public void setFragments(PersonalTasksFragment fragment1, PersonalTasksFragment fragment2){
+    public void setFragments(PersonalTasksFragment fragment1, GroupsFragment fragment2){
         mFragment1 =fragment1;
         mFragment2 = fragment2;
     }
