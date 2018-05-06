@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".GroupTasksActivity" />
+        <activity
+            android:name=".AddTaskActivity"
+            android:label="@string/add_new_task" />
+        <activity
+            android:name=".AddGroupActivity"
+            android:label="@string/add_new_group" />
+        <activity android:name=".AddMembersActivity"></activity>
     </application>
 
 </manifest>
