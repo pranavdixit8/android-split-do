@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private int FRAGMENT_POSITION;
+    private int FRAGMENT_POSITION = 0;
 
     public static final String ANONYMOUS = "anonymous";
     private static final int RC_SIGN_IN =1;
@@ -168,10 +168,20 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
-        mViewPager.setCurrentItem(FRAGMENT_POSITION);
+
+        mViewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(FRAGMENT_POSITION);
+            }
+        }, 5);
+
+//        mViewPager.setCurrentItem(FRAGMENT_POSITION);
+//        mTabsAdapter.notifyDataSetChanged();
         Log.d(TAG, "onResume: " + FRAGMENT_POSITION);
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
+
 
     @Override
     protected void onPause() {
@@ -206,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         PagerAdapter pagerAdapter = mTabsAdapter;
 
         mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setOffscreenPageLimit(2);
 
 
         mViewPager.addOnPageChangeListener(this);
