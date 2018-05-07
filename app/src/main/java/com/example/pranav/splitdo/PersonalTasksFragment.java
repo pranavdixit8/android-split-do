@@ -1,14 +1,23 @@
 package com.example.pranav.splitdo;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,7 +26,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class PersonalTasksFragment extends Fragment {
+public class PersonalTasksFragment extends Fragment implements PersonalTasksAdapter.OnLocationClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener  {
+
+    public static final String TAG = PersonalTasksFragment.class.getSimpleName();
+
     ArrayList<TaskObject> mTasks;
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -60,6 +72,10 @@ public class PersonalTasksFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_personal_tasks,container,false);
 
+        GeoDataClient geoDataClient = Places.getGeoDataClient(getContext());
+
+
+
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUserTasksDatabaseRef = mFirebaseDatabase.getReference().child("users").child("tasks");
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_tasks);
@@ -68,7 +84,9 @@ public class PersonalTasksFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new PersonalTasksAdapter(getContext());
+        mAdapter = new PersonalTasksAdapter(getContext(), this);
+
+        mAdapter.setGoogleAPIClient(geoDataClient);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -106,5 +124,33 @@ public class PersonalTasksFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.d(TAG, "onConnected: ");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.d(TAG, "onConnectionSuspended: ");
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed: ");
+    }
+
+    @Override
+    public void onclick(LatLng latLng, String name, String address) {
+        Intent intent = new Intent(getContext(),MapMarkerActivity.class);
+        Double lat = latLng.latitude;
+        Double lng = latLng.longitude;
+        intent.putExtra("lat", lat);
+        intent.putExtra("lng", lng);
+        intent.putExtra("name", name);
+        intent.putExtra("address", address);
+
+        startActivity(intent);
     }
 }

@@ -12,4 +12,6 @@
     <string name="add_new_task">Add a new task</string>
     <string name="add_new_group">Add a new group</string>
     <string name="edit_enter_name">Enter name</string>
+    <string name="permission_granted">permission granted</string>
+    <string name="permission_not_granted">permission not granted</string>
 </resources>

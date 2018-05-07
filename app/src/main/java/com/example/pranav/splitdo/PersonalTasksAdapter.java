@@ -1,7 +1,9 @@
 package com.example.pranav.splitdo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,21 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBufferResponse;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 
@@ -24,10 +41,24 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
     private int mPosition =999;
     private boolean mClicked = false;
     private boolean mMovePressed = false;
+    private GeoDataClient mClient;
 
+    private OnLocationClickListener mClickListener;
 
-    public PersonalTasksAdapter(Context mContext) {
+    interface OnLocationClickListener{
+
+        void onclick(LatLng latLng, String name, String address);
+    }
+
+    public void setGoogleAPIClient(GeoDataClient client){
+
+        mClient = client;
+
+    }
+
+    public PersonalTasksAdapter(Context mContext, OnLocationClickListener clickListener) {
         this.mContext = mContext;
+        this.mClickListener = clickListener;
     }
 
     public void clearData(){
@@ -150,6 +181,33 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                     Log.d(TAG, "onClick: " + mClicked);
                     mPosition = pos;
                     notifyDataSetChanged();
+                }
+            });
+
+            locationView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String id = (String) view.getTag();
+                    mClient.getPlaceById(id).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
+                        @Override
+                        public void onComplete(@NonNull Task<PlaceBufferResponse> task) {
+                            if (task.isSuccessful()) {
+                                PlaceBufferResponse places = task.getResult();
+                                Place myPlace = places.get(0);
+                                LatLng latLng = myPlace.getLatLng();
+                                String name = myPlace.getName().toString();
+                                String address = myPlace.getAddress().toString();
+                                mClickListener.onclick(latLng,name,address);
+                                Log.i(TAG, "Place found: " + myPlace.getName());
+                                places.release();
+                            } else {
+                                Log.e(TAG, "Place not found.");
+                            }
+                        }
+                    });
+
+
+
                 }
             });
 
