@@ -1,6 +1,8 @@
 package com.example.pranav.splitdo;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -81,6 +83,8 @@ public class AddGroupActivity extends AppCompatActivity {
         mAddMembersLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 Intent intent = new Intent(AddGroupActivity.this, AddMembersActivity.class);
 
                 startActivity(intent);

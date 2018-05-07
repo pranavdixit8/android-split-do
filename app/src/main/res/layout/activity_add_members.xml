@@ -15,7 +15,7 @@
     <!--contact name-->
     <EditText
 
-        android:id="@+id/et_group_name"
+        android:id="@+id/et_contact_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
