@@ -38,6 +38,9 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import static com.example.pranav.splitdo.MainActivity.getUid;
+import static com.example.pranav.splitdo.MainActivity.getUser;
+
 public class AddTaskActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener  {
 
     public static final String TAG = AddTaskActivity.class.getSimpleName();
@@ -54,6 +57,10 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
 
     private GoogleApiClient mClient;
 
+
+    private String mUid;
+    private UserObject mUser;
+    private String mUsername;
     private String mGroupName;
     boolean isGroupTask = false;
 
@@ -73,6 +80,11 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
         setContentView(R.layout.activity_add_task);
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+
+
+        mUser = getUser();
+        mUid = getUid();
+        mUsername = mUser.getName();
 
         mClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -102,7 +114,7 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
             mDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupName).child("tasks");
         }else{
             isGroupTask = false;
-            mDatabaseReference = mFirebaseDatabase.getReference().child("users").child("tasks");
+            mDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
         }
 
 

@@ -47,6 +47,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private GroupsFragment mFragment2;
 
 
+    public static UserObject getUser(){
+
+        return mUser;
+
+    }
+
+    public static  String getUid(){
+
+        return mUid;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                 if(user!=null){
                     mUid = user.getUid();
                     mUser = new UserObject(user.getDisplayName(),user.getEmail());
-                    Toast.makeText(MainActivity.this,"You are signed in", Toast.LENGTH_SHORT);
+                    Toast.makeText(MainActivity.this,"you are signed in", Toast.LENGTH_SHORT);
                     onSignInStart(user.getDisplayName());
                 }else {
                     onSignOutEnd();
@@ -173,11 +184,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 
     }
-
-
-
-
-
 
     private void attachViewPagerFragments() {
 

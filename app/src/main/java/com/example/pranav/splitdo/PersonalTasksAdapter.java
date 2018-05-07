@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -188,6 +189,9 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                 @Override
                 public void onClick(View view) {
                     String id = (String) view.getTag();
+                    if(id == null){
+                        Toast.makeText(view.getContext(), "No location specified", Toast.LENGTH_SHORT).show();
+                        return;}
                     mClient.getPlaceById(id).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
                         @Override
                         public void onComplete(@NonNull Task<PlaceBufferResponse> task) {

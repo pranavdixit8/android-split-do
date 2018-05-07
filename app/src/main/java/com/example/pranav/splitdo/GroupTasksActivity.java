@@ -19,6 +19,7 @@ public class GroupTasksActivity extends AppCompatActivity {
 
     private FloatingActionButton mTasksFab;
     private String mGroupName;
+    private String mGroupId;
 
 
     @Override
@@ -40,7 +41,7 @@ public class GroupTasksActivity extends AppCompatActivity {
         }
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mGroupDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupName).child("tasks");
+        mGroupDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("tasks");
 
         PersonalTasksFragment fragment1 = new PersonalTasksFragment();
 

@@ -26,6 +26,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import static com.example.pranav.splitdo.MainActivity.getUid;
+import static com.example.pranav.splitdo.MainActivity.getUser;
+
 public class PersonalTasksFragment extends Fragment implements PersonalTasksAdapter.OnLocationClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener  {
 
     public static final String TAG = PersonalTasksFragment.class.getSimpleName();
@@ -33,11 +36,13 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
     ArrayList<TaskObject> mTasks;
 
     private FirebaseDatabase mFirebaseDatabase;
-
     private DatabaseReference mUserTasksDatabaseRef;
 
     private RecyclerView mRecyclerView;
     private PersonalTasksAdapter mAdapter;
+
+    private String mUid;
+    private UserObject mUser;
 
     private ChildEventListener mChildEventListener;
 
@@ -75,9 +80,15 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         GeoDataClient geoDataClient = Places.getGeoDataClient(getContext());
 
 
+        mUid = getUid();
+        mUser = getUser();
+
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mUserTasksDatabaseRef = mFirebaseDatabase.getReference().child("users").child("tasks");
+
+        //tasks specific to the user
+        mUserTasksDatabaseRef = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_tasks);
 
 
@@ -88,6 +99,8 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
 
         mAdapter.setGoogleAPIClient(geoDataClient);
         mRecyclerView.setAdapter(mAdapter);
+
+
 
 
         mChildEventListener = new ChildEventListener() {

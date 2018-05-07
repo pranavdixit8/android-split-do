@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import static com.example.pranav.splitdo.MainActivity.getUid;
+
 public class GroupsFragment extends Fragment {
 
     private ArrayList<GroupObject> mGroups = new ArrayList<>();
@@ -26,6 +28,10 @@ public class GroupsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private GroupsAdapter mAdapter;
+
+    private String mUsername;
+    private String mGroupId;
+    private String mUId;
 
 
     private ChildEventListener mChildEventListener;
@@ -39,9 +45,11 @@ public class GroupsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_groups,container,false);
 
+        mUsername = MainActivity.getUser().getName();
+        mUId = getUid();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mGroupDatabaseReference = mFirebaseDatabase.getReference().child("groups");
+        mGroupDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUId).child("groups");
 
 
 

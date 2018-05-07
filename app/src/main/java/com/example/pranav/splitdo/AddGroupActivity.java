@@ -19,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.pranav.splitdo.MainActivity.getUid;
+
 public class AddGroupActivity extends AppCompatActivity {
 
     public static final String TAG = AddGroupActivity.class.getSimpleName();
@@ -29,10 +31,15 @@ public class AddGroupActivity extends AppCompatActivity {
 
     private LinearLayout mAddMembersLinearLayout;
 
+    private String mUserName;
+    private String mUId;
+    private static String mGroupId;
+
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mGroupDatabaseReference;
     private DatabaseReference mGroupMembersReference;
+    private DatabaseReference mUserDatabaseReference;
 
 
 
@@ -43,12 +50,24 @@ public class AddGroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_group);
 
+
+        mUserName = MainActivity.getUser().getName();
+        mUId = getUid();
+
         mAddMembersLinearLayout = findViewById(R.id.ll_add_members);
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         mGroupDatabaseReference = mFirebaseDatabase.getReference().child("groups").push();
-        mGroupMembersReference = mFirebaseDatabase.getReference().child("groups").child("members");
+        mGroupId = mGroupDatabaseReference.getKey();
+
+        Log.d(TAG, "onCreate: " +  mGroupId);
+
+        mGroupMembersReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("members");
+        mGroupDatabaseReference =  mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("groupInfo");
+        mUserDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUId).child("groups").child(mGroupId);
+
+
 
 
 
@@ -101,9 +120,18 @@ public class AddGroupActivity extends AppCompatActivity {
             return;
         }
 
-        GroupObject groupObject = new GroupObject(input,null, null, null, null, null);
+        Map<String, String> member = new HashMap<>();
 
-        mGroupDatabaseReference.setValue(groupObject);
+        member.put(mUId,"owner");
+
+        mGroupMembersReference.setValue(member);
+
+
+        GroupObject taskObject = new GroupObject(input,mUserName, null, null, null, null);
+
+        mGroupDatabaseReference.setValue(taskObject);
+
+        mUserDatabaseReference.setValue(taskObject);
 
         finish();
 
