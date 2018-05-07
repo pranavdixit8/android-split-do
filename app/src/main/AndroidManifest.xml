@@ -32,8 +32,8 @@
         <activity
             android:name=".AddGroupActivity"
             android:label="@string/add_new_group" />
-        <activity android:name=".AddMembersActivity" />
-        <activity android:name=".MapMarkerActivity"></activity>
+        <activity android:name=".MapMarkerActivity" />
+        <activity android:name=".AddContactsActivity"></activity>
     </application>
 
 </manifest>

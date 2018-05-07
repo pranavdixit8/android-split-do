@@ -33,16 +33,17 @@ import static com.example.pranav.splitdo.MainActivity.getUid;
 public class AddGroupActivity extends AppCompatActivity {
 
     public static final String TAG = AddGroupActivity.class.getSimpleName();
+    private static final int REQUEST_CONTACT = 1;
 
-    private ArrayList<String> mEmails = new ArrayList<>();
+    private ArrayList<UserObject> mContacts = new ArrayList<>();
 
 
     private EditText mEditTextView;
-    private EditText mEmailEditText;
     private Button mButton;
-    private Button mAddMemberButton;
-    private RecyclerView mEmailRecyclerView;
-    private EmailsAdapter mEmailAdapter;
+
+
+    private RecyclerView mRecyclerView;
+    private ContactsAdapter mAdapter;
 
     private LinearLayout mAddMembersLinearLayout;
     private LinearLayout mAddMembersButtonLinearLayout;
@@ -58,6 +59,7 @@ public class AddGroupActivity extends AppCompatActivity {
     private DatabaseReference mGroupMembersPendingReference;
     private DatabaseReference mUserDatabaseReference;
     private DatabaseReference mUserInfoDatabaseReference;
+    private DatabaseReference mMemberDatabaseReference;
 
     private ChildEventListener mChildEventListener;
 
@@ -82,50 +84,14 @@ public class AddGroupActivity extends AppCompatActivity {
         mUId = getUid();
 
         mAddMembersButtonLinearLayout = findViewById(R.id.ll_add_members_button);
-        mAddMembersLinearLayout = findViewById(R.id.ll_add_members);
+        mRecyclerView = findViewById(R.id.contacts_recyclerview);
 
-        mEmailRecyclerView = findViewById(R.id.email_recyclerview);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setHasFixedSize(true);
 
-        mEmailAdapter = new EmailsAdapter();
+        mAdapter = new ContactsAdapter();
 
-        mEmailRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mEmailRecyclerView.setHasFixedSize(true);
-
-
-        mEmailRecyclerView.setAdapter(mEmailAdapter);
-
-
-        mChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                UserObject object = dataSnapshot.getValue(UserObject.class);
-                mEmailAdapter.addObject(object);
-
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-
+        mRecyclerView.setAdapter(mAdapter);
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -138,17 +104,15 @@ public class AddGroupActivity extends AppCompatActivity {
         mGroupMembersReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("members");
         mGroupDatabaseReference =  mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("groupInfo");
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUId).child("groups").child(mGroupId);
-        mGroupMembersPendingReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("pending");
-        mUserInfoDatabaseReference =  mFirebaseDatabase.getReference().child("userInfo");
 
-        mUserInfoDatabaseReference.addChildEventListener(mChildEventListener);
+
 
 
         mEditTextView = (EditText) findViewById(R.id.et_group_name);
-        mEmailEditText = findViewById(R.id.et_enter_email);
+
 
         mButton = (Button) findViewById((R.id.add_group_button));
-        mAddMemberButton = findViewById(R.id.add_button);
+
 
 
 
@@ -157,7 +121,6 @@ public class AddGroupActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() > 0) {
@@ -166,53 +129,40 @@ public class AddGroupActivity extends AppCompatActivity {
                     mButton.setEnabled(false);
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {
-
             }
-
         });
-
-        mEmailEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() > 0) {
-                    mAddMemberButton.setEnabled(true);
-                } else {
-                    mAddMemberButton.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-
-        });
-
-
-
 
         mAddMembersButtonLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                mAddMembersButtonLinearLayout.setVisibility(View.INVISIBLE);
-                mAddMembersLinearLayout.setVisibility(View.VISIBLE);
+                Intent intent =  new Intent(AddGroupActivity.this, AddContactsActivity.class);
 
-                mEmailEditText.requestFocus();
-
-
-
+                startActivityForResult(intent, REQUEST_CONTACT);
 
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==REQUEST_CONTACT && resultCode == RESULT_OK){
+
+        String name = data.getStringExtra("name");
+        String email = data.getStringExtra("email");
+        String uid = data.getStringExtra("uid");
+
+        UserObject obj = new UserObject(name, email, uid);
+
+        mContacts.add(obj);
+        mAdapter.addObject(obj);
+
+
+
+        }
     }
 
     public void onClickAddGroup(View view) {
@@ -222,23 +172,28 @@ public class AddGroupActivity extends AppCompatActivity {
             return;
         }
 
-        Map<String, String> owner = new HashMap<>();
+        GroupObject groupObject = new GroupObject(input,mUserName, mUId, mGroupId, null, null);
 
-        owner.put(mUId,"owner");
+        Map<String, Object> owner = new HashMap<>();
+        owner.put(mUId, "owner");
 
-        mGroupMembersReference.setValue(owner);
+        mGroupMembersReference.updateChildren(owner);
 
-        for(String email : mEmails){
+        for(UserObject contact : mContacts){
 
-            Log.d(TAG, "onClickAddGroup: " +email);
-            Map<String, String> member = new HashMap<>();
-            member.put(email,"member");
-            mGroupMembersPendingReference.setValue(member);
+            String uid = contact.getUid();
+            if(!uid.equals(mUId)) {
+                Log.d(TAG, "onClickAddGroup: " + contact.getEmail());
+                Map<String, Object> member = new HashMap<>();
+                member.put(uid, "member");
+
+                mMemberDatabaseReference = mFirebaseDatabase.getReference().child("users").child(uid).child("groups").child(mGroupId);
+                mMemberDatabaseReference.setValue(groupObject);
+                mGroupMembersReference.updateChildren(member);
+            }
 
         }
 
-
-        GroupObject groupObject = new GroupObject(input,mUserName, mUId, mGroupId, null, null);
 
         mGroupDatabaseReference.setValue(groupObject);
 
