@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,11 +30,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private int FRAGMENT_POSITION;
+
     public static final String ANONYMOUS = "anonymous";
     private static final int RC_SIGN_IN =1;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mUserTasksDatabaseRef;
 
     private static UserObject mUser;
     private static String mUid;
@@ -42,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private FloatingActionButton mGroupFab;
     private FloatingActionButton mTasksFab;
+
+    private ViewPager mViewPager;
+    private TabsPagerAdapter mTabsAdapter;
 
     private PersonalTasksFragment mFragment1;
     private GroupsFragment mFragment2;
@@ -63,12 +72,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        mViewPager = (ViewPager) findViewById(R.id.home_viewpager);
+        mTabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-       
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+
 
         mFragment1 = new PersonalTasksFragment();
+
         mFragment2 = new GroupsFragment();
 
 
@@ -93,15 +107,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
-//        TabsPagerAdapter tabAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-//        tabAdapter.setFragments(mFragment1,mFragment2);
-//
-//        PagerAdapter pagerAdapter = tabAdapter;
-//
-//        viewPager.setAdapter(pagerAdapter);
-//
-//        viewPager.addOnPageChangeListener(this);
 
 
 
@@ -163,12 +168,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
+        mViewPager.setCurrentItem(FRAGMENT_POSITION);
+        Log.d(TAG, "onResume: " + FRAGMENT_POSITION);
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+//        FRAGMENT_POSITION = mViewPager.getCurrentItem();
+        Log.d(TAG, "onPause: " + FRAGMENT_POSITION);
         mFirebaseAuth.removeAuthStateListener(mAuthListener);
     }
     private void onSignInStart(String displayName) {
@@ -187,15 +196,19 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private void attachViewPagerFragments() {
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.home_viewpager);
-        TabsPagerAdapter tabAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-        tabAdapter.setFragments(mFragment1,mFragment2);
+        mUserTasksDatabaseRef = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
+        mFragment1.setDatabaseReference(mUserTasksDatabaseRef);
 
-        PagerAdapter pagerAdapter = tabAdapter;
 
-        viewPager.setAdapter(pagerAdapter);
 
-        viewPager.addOnPageChangeListener(this);
+        mTabsAdapter.setFragments(mFragment1,mFragment2);
+
+        PagerAdapter pagerAdapter = mTabsAdapter;
+
+        mViewPager.setAdapter(pagerAdapter);
+
+
+        mViewPager.addOnPageChangeListener(this);
 
     }
 
@@ -208,9 +221,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onPageSelected(int position) {
         switch (position) {
             case 0:
+                FRAGMENT_POSITION = 0;
                 mGroupFab.setVisibility(View.INVISIBLE);
                 return;
             case 1:
+                FRAGMENT_POSITION = 1;
                 mGroupFab.setVisibility(View.VISIBLE);
                 return;
 

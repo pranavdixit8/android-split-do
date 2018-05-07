@@ -3,11 +3,13 @@ package com.example.pranav.splitdo;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +53,13 @@ public class AddGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_group);
 
 
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+        }
+
         mUserName = MainActivity.getUser().getName();
         mUId = getUid();
 
@@ -66,10 +75,6 @@ public class AddGroupActivity extends AppCompatActivity {
         mGroupMembersReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("members");
         mGroupDatabaseReference =  mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("groupInfo");
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUId).child("groups").child(mGroupId);
-
-
-
-
 
 
 
@@ -127,13 +132,26 @@ public class AddGroupActivity extends AppCompatActivity {
         mGroupMembersReference.setValue(member);
 
 
-        GroupObject taskObject = new GroupObject(input,mUserName, null, null, null, null);
+        GroupObject groupObject = new GroupObject(input,mUserName, mUId, mGroupId, null, null);
 
-        mGroupDatabaseReference.setValue(taskObject);
+        mGroupDatabaseReference.setValue(groupObject);
 
-        mUserDatabaseReference.setValue(taskObject);
+        mUserDatabaseReference.setValue(groupObject);
 
         finish();
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                this.finish();
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

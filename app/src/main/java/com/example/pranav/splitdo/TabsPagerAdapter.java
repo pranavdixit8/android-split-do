@@ -9,6 +9,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     private GroupsFragment mFragment2;
 
 
+
     public TabsPagerAdapter(FragmentManager fm){
         super(fm);
     }

@@ -84,11 +84,6 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         mUser = getUser();
 
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-
-        //tasks specific to the user
-        mUserTasksDatabaseRef = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
-
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_tasks);
 
 

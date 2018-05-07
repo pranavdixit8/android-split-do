@@ -36,6 +36,8 @@ public class GroupTasksActivity extends AppCompatActivity {
             mGroupName = intent.getStringExtra("name");
             mGroupNameTextView.setText(mGroupName);
 
+            mGroupId = intent.getStringExtra("groupId");
+
 
 
         }
@@ -58,6 +60,7 @@ public class GroupTasksActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent addTaskIntent = new Intent(GroupTasksActivity.this, AddTaskActivity.class);
+                addTaskIntent.putExtra("groupId", mGroupId);
                 addTaskIntent.putExtra("groupName", mGroupName);
                 startActivity(addTaskIntent);
             }

@@ -54,9 +54,11 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
         public void onClick(View v) {
             int position = getAdapterPosition();
             String name =  mGroups.get(position).getText();
+            String groupId = mGroups.get(position).getGroupID();
             Intent intent = new Intent(v.getContext(), GroupTasksActivity.class);
 
             intent.putExtra("name", name);
+            intent.putExtra("groupId", groupId);
             v.getContext().startActivity(intent);
         }
     }

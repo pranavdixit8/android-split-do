@@ -6,11 +6,13 @@ import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,7 +64,10 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
     private UserObject mUser;
     private String mUsername;
     private String mGroupName;
+    private String mGroupId;
     boolean isGroupTask = false;
+
+    private TextView mGroupNameTextView;
 
     private TextView mLocationNameTextView;
     private TextView mLocationAddressTextView;
@@ -78,6 +83,15 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+        }
+
+
 
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
 
@@ -101,17 +115,23 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
 
         mAddLocationLinearLayout = findViewById(R.id.ll_add_location);
         mAddedLocationLinearLayout = findViewById(R.id.ll_added_location);
+        mGroupNameTextView = findViewById(R.id.tv_group_name);
+
+
 
         Intent intent = getIntent();
 
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-        if(intent!=null && intent.hasExtra("groupName")){
+        if(intent!=null && intent.hasExtra("groupName") ){
+
 
             isGroupTask = true;
             mGroupName = intent.getStringExtra("groupName");
-            mDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupName).child("tasks");
+            mGroupId = intent.getStringExtra("groupId");
+            mGroupNameTextView.setText(mGroupName);
+            mDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("tasks");
         }else{
             isGroupTask = false;
             mDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
@@ -161,7 +181,7 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
         Log.d(TAG, "onClickAddTask: " + d.format(cal.getTime()));
 
 
-        TaskObject taskObject = new TaskObject(input,time, null, null, null,null, null, null,null, null, null,"created",mPlaceId);
+        TaskObject taskObject = new TaskObject(input,time, null, null, mUsername,mUid, null, null,null, null, null,"created",mPlaceId);
 
         mDatabaseReference.push().setValue(taskObject);
 
@@ -240,5 +260,18 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
             });
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                this.finish();
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
