@@ -43,30 +43,73 @@
 
     <!--add members button/click-->
 
-    <LinearLayout
-        android:id="@+id/ll_add_members"
+    <!--add members button/click-->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_add_members"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_black_72dp"
-            android:tint="@color/colorAccent"
-            android:contentDescription="@string/add_icon"
-            />
-        <TextView
-            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+            <EditText
+                android:id="@+id/et_enter_email"
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:gravity="start"
+                android:inputType="text"
+                android:layout_height="wrap_content"
+                android:hint="@string/edit_enter_email"
+                />
+            <Button
+                android:id="@+id/add_button"
+                android:text="@string/add_button"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@color/colorAccent"
+                android:textColor="@android:color/white"
+                android:maxLines="1"
+                android:layout_height="wrap_content"
+                android:onClick="onClickAddMember"/>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/ll_add_members_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            android:text="@string/add_members"/>
+            android:orientation="horizontal"
+            >
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_black_72dp"
+                android:tint="@color/colorAccent"
+                android:contentDescription="@string/add_icon"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                android:text="@string/add_members"/>
 
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/email_recyclerview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 
 
 

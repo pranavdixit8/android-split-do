@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserTasksDatabaseRef;
+    private DatabaseReference mUserDatabaseReference;
 
     private static UserObject mUser;
     private static String mUid;
@@ -80,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
 
-
         mFragment1 = new PersonalTasksFragment();
 
         mFragment2 = new GroupsFragment();
@@ -119,7 +119,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
                 if(user!=null){
                     mUid = user.getUid();
-                    mUser = new UserObject(user.getDisplayName(),user.getEmail());
+                    mUser = new UserObject(user.getDisplayName(),user.getEmail(), mUid);
+                    mUserDatabaseReference = mFirebaseDatabase.getReference().child("userInfo").child(mUid);
+                    mUserDatabaseReference.setValue(mUser);
                     Toast.makeText(MainActivity.this,"you are signed in", Toast.LENGTH_SHORT);
                     onSignInStart(user.getDisplayName());
                 }else {

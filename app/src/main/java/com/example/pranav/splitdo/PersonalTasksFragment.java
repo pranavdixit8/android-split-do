@@ -80,7 +80,8 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         GeoDataClient geoDataClient = Places.getGeoDataClient(getContext());
 
 
-        mUid = getUid();
+//        mUid = getUid();
+        mUid = MainActivity.getUser().getEmail().split("@")[0];
         mUser = getUser();
 
 

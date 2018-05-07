@@ -15,4 +15,5 @@
     <string name="permission_granted">permission granted</string>
     <string name="permission_not_granted">permission not granted</string>
     <string name="action_signout">sign out</string>
+    <string name="edit_enter_email">Enter email here</string>
 </resources>

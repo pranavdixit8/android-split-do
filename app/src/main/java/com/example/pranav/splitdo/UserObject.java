@@ -4,15 +4,23 @@ public class UserObject {
 
     private String name;
     private String email;
+    private String mUid;
 //    private ArrayList<TaskObject> tasks;
 
     public UserObject(){}
 
-    public UserObject(String name, String email){
+    public UserObject(String name, String email, String mUid){
         this.name = name;
         this.email = email;
+        this.mUid = mUid;
 //        this.tasks = tasks;
     }
+
+    public String getUid() {
+        return mUid;
+    }
+
+
 
     public String getName() {
         return name;
@@ -23,6 +31,9 @@ public class UserObject {
         return email;
     }
 
+    public void setUid(String mUid) {
+        this.mUid = mUid;
+    }
 
     public void setName(String name) {
         this.name = name;
