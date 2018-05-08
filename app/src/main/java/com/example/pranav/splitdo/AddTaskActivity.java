@@ -65,7 +65,8 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
     private String mUsername;
     private String mGroupName;
     private String mGroupId;
-    boolean isGroupTask = false;
+    private boolean isGroupTask = false;
+    private String mTaskId;
 
     private TextView mGroupNameTextView;
 
@@ -131,10 +132,13 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
             mGroupName = intent.getStringExtra("groupName");
             mGroupId = intent.getStringExtra("groupId");
             mGroupNameTextView.setText(mGroupName);
-            mDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("tasks");
+            mDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("tasks").push();
+            mTaskId = mDatabaseReference.getKey();
+
         }else{
             isGroupTask = false;
-            mDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
+            mDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks").push();
+            mTaskId = mDatabaseReference.getKey();
         }
 
 
@@ -181,9 +185,9 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
         Log.d(TAG, "onClickAddTask: " + d.format(cal.getTime()));
 
 
-        TaskObject taskObject = new TaskObject(input,time, null, null, mUsername,mUid, null, null,null, null, null,"created",mPlaceId);
+        TaskObject taskObject = new TaskObject(input,mTaskId,time, null, null, mUsername,mUid, null, null,null, null, null,"created",mPlaceId);
 
-        mDatabaseReference.push().setValue(taskObject);
+        mDatabaseReference.setValue(taskObject);
 
         finish();
 
