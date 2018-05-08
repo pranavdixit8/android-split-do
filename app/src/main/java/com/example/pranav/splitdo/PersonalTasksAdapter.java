@@ -124,15 +124,14 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
         if(position ==mPosition && mDeletePressed){
 //            holder.itemView.setVisibility(View.GONE);
 
-
             holder.mTaskView.setVisibility(GONE);
             mDeletePressed =false;
             return;
         }
 
         if(status.equals("deleted")){
-            holder.itemView.setVisibility(GONE);
-
+            holder.mTaskView.setVisibility(GONE);
+            return;
         }
 
 
@@ -263,7 +262,7 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                                 notifyDataSetChanged();
                             }
                             else{
-                                Toast.makeText(view.getContext(), "just a touch", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(view.getContext(), "just a touch", Toast.LENGTH_SHORT).show();
                                 mClicked =true;
                                 mPosition = pos;
                                 notifyDataSetChanged();
