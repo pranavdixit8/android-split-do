@@ -1,39 +1,56 @@
-<LinearLayout android:orientation="vertical"
+<LinearLayout android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp">
 
         <TextView
             android:id="@+id/app_name"
             android:text="@string/app_name"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:textStyle="bold|italic"
+            android:textStyle="bold"
             android:gravity="center"
             android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimaryLight"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"/>
+            android:background="@color/colorPrimaryLight" />
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/tv_pending_tasks"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:textStyle="bold"
+            android:background="@android:color/white"
             android:textColor="@android:color/darker_gray"
-            android:layout_marginBottom="8dp"
             />
 
-       <TextView
-           android:id="@+id/tv_pending_count"
-           android:textColor="@android:color/black"
-           android:textSize="20sp"
-           android:layout_width="100dp"
-           android:layout_height="wrap_content" />
+        <FrameLayout
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white">
+            <TextView
+                android:id="@+id/tv_pending_count"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:background="@drawable/ic_brightness_1_black_24dp"
+                />
+
+        </FrameLayout>
+
+
+
+
+
+    </LinearLayout>
 
 
 

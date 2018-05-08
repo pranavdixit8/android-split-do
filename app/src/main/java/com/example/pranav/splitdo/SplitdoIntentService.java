@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.database.ChildEventListener;
@@ -16,9 +17,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import static com.example.pranav.splitdo.MainActivity.getUid;
 import static com.example.pranav.splitdo.MainActivity.getUser;
 
 public class SplitdoIntentService extends IntentService {
+
+    public static final String TAG = SplitdoIntentService.class.getSimpleName();
 
     public static final String ACTION_GET_PENDING_TASKS_COUNT = "get pending tasks count";
 
@@ -31,8 +35,8 @@ public class SplitdoIntentService extends IntentService {
 
     private ChildEventListener mChildEventListener;
 
-    public SplitdoIntentService(String name) {
-        super(name);
+    public SplitdoIntentService() {
+        super("SplitdoIntentService");
     }
 
 
@@ -50,7 +54,7 @@ public class SplitdoIntentService extends IntentService {
 
         if(intent!=null){
 
-            mUid = MainActivity.getUser().getEmail().split("@")[0];
+            mUid = getUid();
             mUser = getUser();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
 
@@ -58,17 +62,20 @@ public class SplitdoIntentService extends IntentService {
             String action = intent.getAction();
             if(ACTION_GET_PENDING_TASKS_COUNT.equals(action)){
 
+                Log.d(TAG, "onHandleIntent: 1step");
+
                 mChildEventListener = new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         TaskObject object = dataSnapshot.getValue(TaskObject.class);
                         mTasks.add(object);
 
-
+                        makeCountUpdate();
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
 
                     }
 
@@ -90,24 +97,13 @@ public class SplitdoIntentService extends IntentService {
 
                 mUserTasksDatabaseRef.addChildEventListener(mChildEventListener);
 
-
-                int count = getPendingTaskCount();
-
-
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, SplitdoAppWidget.class));
-
-                SplitdoAppWidget.updateTasksWidgets(this, appWidgetManager, count, appWidgetIds);
-
             }
         }
 
     }
 
     private int getPendingTaskCount() {
-
         int count = 0;
-
         for(TaskObject obj :mTasks){
             String status = obj.getStatus();
             if(status.equals("created")){
@@ -115,5 +111,18 @@ public class SplitdoIntentService extends IntentService {
             }
         }
         return count;
+    }
+
+    void makeCountUpdate(){
+
+        int count = getPendingTaskCount();
+
+        Log.d(TAG, "onHandleIntent: " + count);
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getBaseContext());
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getBaseContext(), SplitdoAppWidget.class));
+
+        SplitdoAppWidget.updateTasksWidgets(getBaseContext(), appWidgetManager, count, appWidgetIds);
+
     }
 }
