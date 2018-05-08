@@ -82,9 +82,15 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         GeoDataClient geoDataClient = Places.getGeoDataClient(getContext());
 
 
-//        mUid = getUid();
-        mUid = MainActivity.getUser().getEmail().split("@")[0];
+
+
+
+        mUid = getUid();
         mUser = getUser();
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+        mTasksDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
 
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_tasks);
@@ -98,40 +104,6 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         mAdapter.setGoogleAPIClient(geoDataClient);
         mRecyclerView.setAdapter(mAdapter);
 
-
-
-
-        mChildEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                TaskObject object = dataSnapshot.getValue(TaskObject.class);
-                mAdapter.addObject(object);
-
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        };
-
-        mTasksDatabaseReference.addChildEventListener(mChildEventListener);
 
 
         return view;
@@ -176,4 +148,63 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
 
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        attachTasksDatabaseListener();
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detachTasksDatabaseListener();
+    }
+
+    void detachTasksDatabaseListener(){
+
+        if (mChildEventListener != null) {
+            mTasksDatabaseReference.removeEventListener(mChildEventListener);
+            mChildEventListener = null;
+        }
+    }
+
+    void attachTasksDatabaseListener(){
+
+        if(mChildEventListener==null) {
+
+            mChildEventListener = new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    TaskObject object = dataSnapshot.getValue(TaskObject.class);
+                    mAdapter.addObject(object);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            };
+
+            mTasksDatabaseReference.addChildEventListener(mChildEventListener);
+
+        }
+    }
+
+
 }

@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mUserTasksDatabaseRef;
+    private DatabaseReference mGroupDatabaseReference;
     private DatabaseReference mUserDatabaseReference;
 
     private static UserObject mUser;
@@ -77,14 +78,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         mTabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-
 
         mFragment1 = new PersonalTasksFragment();
 
         mFragment2 = new GroupsFragment();
-
 
         mGroupFab = (FloatingActionButton) findViewById(R.id.fab_add_group);
 
@@ -170,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onResume() {
         super.onResume();
-
         mViewPager.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -178,9 +175,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         }, 5);
 
-//        mViewPager.setCurrentItem(FRAGMENT_POSITION);
-//        mTabsAdapter.notifyDataSetChanged();
-        Log.d(TAG, "onResume: " + FRAGMENT_POSITION);
         mFirebaseAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -188,13 +182,18 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onPause() {
         super.onPause();
-//        FRAGMENT_POSITION = mViewPager.getCurrentItem();
-        Log.d(TAG, "onPause: " + FRAGMENT_POSITION);
-        mFirebaseAuth.removeAuthStateListener(mAuthListener);
+        if (mAuthListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthListener);
+        }
+        mFragment1.clearAdapterData();
+        mFragment2.clearAdapterData();
+        detachDatabaseListeners();
     }
+
+
     private void onSignInStart(String displayName) {
         mUsername = displayName;
-        attachViewPagerFragments();
+        setUpViewPager();
     }
 
 
@@ -202,16 +201,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         mUsername = ANONYMOUS;
         mFragment1.clearAdapterData();
+        mFragment2.clearAdapterData();
+
+        detachDatabaseListeners();
 
 
     }
 
-    private void attachViewPagerFragments() {
-
-        mUserTasksDatabaseRef = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
-        mFragment1.setDatabaseReference(mUserTasksDatabaseRef);
-
-
+    private void setUpViewPager(){
 
         mTabsAdapter.setFragments(mFragment1,mFragment2);
 
@@ -219,10 +216,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
-
-
         mViewPager.addOnPageChangeListener(this);
+    }
 
+
+    private void detachDatabaseListeners(){
+
+        mFragment1.detachTasksDatabaseListener();
+        mFragment2.detachGroupDatabaseListener();
     }
 
     @Override
