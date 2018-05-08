@@ -51,6 +51,11 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
 
     private OnLocationClickListener mClickListener;
 
+    private OnLongPressedUpdate mLongPressedUpdate;
+
+    private final String mUid = MainActivity.getUid();
+    private final String mUsername = MainActivity.getUser().getName();
+
     interface OnLocationClickListener{
 
         void onclick(LatLng latLng, String name, String address);
@@ -61,10 +66,16 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
         mClient = client;
 
     }
+    interface OnLongPressedUpdate{
 
-    public PersonalTasksAdapter(Context mContext, OnLocationClickListener clickListener) {
+        void onLongPressed(TaskObject obj);
+    }
+
+    public PersonalTasksAdapter(Context mContext, OnLocationClickListener clickListener, OnLongPressedUpdate onLongPressListener) {
         this.mContext = mContext;
         this.mClickListener = clickListener;
+        this.mLongPressedUpdate = onLongPressListener;
+
     }
 
     public void clearData(){
@@ -101,13 +112,13 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
         String description = obj.getText();
         String date = obj.getCreation_time();
         String location = obj.getLocation();
-        String creeatedBy = obj.getCreator();
+        String createdBy = obj.getCreator();
         String completedBy = obj.getCompletor();
 
 
         holder.locationView.setTag(location);
 
-        holder.mCreatedView.setText(creeatedBy);
+        holder.mCreatedView.setText(createdBy);
         if(completedBy!= null)
             holder.mCompletedView.setText(completedBy);
 
@@ -191,6 +202,9 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
 
                     view.performClick();
 
+                    int pos = getAdapterPosition();
+                    TaskObject obj = mTasks.get(pos);
+
                     switch (motionEvent.getAction()){
                         case MotionEvent.ACTION_DOWN :
                             downTime=System.currentTimeMillis();
@@ -201,11 +215,14 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                             if(upTime-downTime>500) {
                                 Log.d(TAG, "onTouch: " + (upTime - downTime));
                                 mLongPressed =true;
+                                obj.setCompletorID(mUid);
+                                obj.setCompletor(mUsername);
+                                obj.setStatus("completed");
+                                mLongPressedUpdate.onLongPressed(obj);
                                 notifyDataSetChanged();
                             }
                             else{
                                 Toast.makeText(view.getContext(), "just a touch", Toast.LENGTH_SHORT).show();
-                                int pos = getAdapterPosition();
                                 mClicked =true;
                                 mPosition = pos;
                                 notifyDataSetChanged();
@@ -216,7 +233,7 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                     return false;
                 }
             });
-            
+
 
             locationView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -250,6 +267,7 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
 
 
     }
+
     }
 
     private class MultiOnClickListener implements View.OnTouchListener{

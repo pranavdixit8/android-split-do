@@ -25,18 +25,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.pranav.splitdo.MainActivity.getUid;
 import static com.example.pranav.splitdo.MainActivity.getUser;
 
-public class PersonalTasksFragment extends Fragment implements PersonalTasksAdapter.OnLocationClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener  {
+public class PersonalTasksFragment extends Fragment implements PersonalTasksAdapter.OnLocationClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, PersonalTasksAdapter.OnLongPressedUpdate {
 
     public static final String TAG = PersonalTasksFragment.class.getSimpleName();
 
     ArrayList<TaskObject> mTasks;
 
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mUserTasksDatabaseRef;
+    private DatabaseReference mTasksDatabaseReference;
 
     private RecyclerView mRecyclerView;
     private PersonalTasksAdapter mAdapter;
@@ -68,7 +70,7 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
     }
 
     public void setDatabaseReference (DatabaseReference databaseRef){
-        mUserTasksDatabaseRef = databaseRef;
+        mTasksDatabaseReference = databaseRef;
     }
 
     @Nullable
@@ -91,7 +93,7 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setHasFixedSize(true);
 
-        mAdapter = new PersonalTasksAdapter(getContext(), this);
+        mAdapter = new PersonalTasksAdapter(getContext(), this, this);
 
         mAdapter.setGoogleAPIClient(geoDataClient);
         mRecyclerView.setAdapter(mAdapter);
@@ -129,7 +131,7 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
             }
         };
 
-        mUserTasksDatabaseRef.addChildEventListener(mChildEventListener);
+        mTasksDatabaseReference.addChildEventListener(mChildEventListener);
 
 
         return view;
@@ -161,5 +163,17 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         intent.putExtra("address", address);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onLongPressed(TaskObject obj) {
+
+        Map<String, Object> task = new HashMap<>();
+
+        task.put(obj.getTaskId(),obj);
+
+        mTasksDatabaseReference.updateChildren(task);
+
+
     }
 }
