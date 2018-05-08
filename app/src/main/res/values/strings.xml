@@ -17,4 +17,5 @@
     <string name="action_signout">sign out</string>
     <string name="edit_enter_email">Enter email here</string>
     <string name="pending_tasks">Pending Tasks</string>
+    <string name="select_contacts">Select contact from below :</string>
 </resources>

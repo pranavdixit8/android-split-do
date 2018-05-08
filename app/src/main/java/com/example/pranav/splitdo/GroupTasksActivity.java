@@ -3,8 +3,10 @@ package com.example.pranav.splitdo;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,10 +24,22 @@ public class GroupTasksActivity extends AppCompatActivity {
     private String mGroupId;
 
 
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_tasks);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if(actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+        }
+
 
         mGroupNameTextView = (TextView) findViewById(R.id.tv_group_name);
 
@@ -65,5 +79,18 @@ public class GroupTasksActivity extends AppCompatActivity {
                 startActivity(addTaskIntent);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+
+                this.finish();
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

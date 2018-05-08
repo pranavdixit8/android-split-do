@@ -3,24 +3,23 @@
 <LinearLayout android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/tv_name_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"
         />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/tv_email_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
         />
     <View
         android:layout_width="match_parent"
