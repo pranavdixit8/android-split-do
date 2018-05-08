@@ -39,12 +39,17 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
 
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mTasksDatabaseReference;
+    private DatabaseReference mGroupDatabaseReference;
+
+    private DatabaseReference mDatabaseReference;
 
     private RecyclerView mRecyclerView;
     private PersonalTasksAdapter mAdapter;
 
     private String mUid;
     private UserObject mUser;
+    private String mGroupId;
+    private  boolean isGroupTasks = false;
 
     private ChildEventListener mChildEventListener;
 
@@ -73,6 +78,13 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         mTasksDatabaseReference = databaseRef;
     }
 
+
+    public void setGroupFlag(boolean flag, String groupId) {
+        isGroupTasks = true;
+        mGroupId = groupId;
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,6 +103,15 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         mTasksDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
+
+
+
+        if(isGroupTasks){
+            mGroupDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("tasks");
+            mDatabaseReference = mGroupDatabaseReference;
+        }else {
+            mDatabaseReference = mTasksDatabaseReference;
+        }
 
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_tasks);
@@ -159,6 +180,7 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
     @Override
     public void onPause() {
         super.onPause();
+        mAdapter.clearData();
         detachTasksDatabaseListener();
     }
 
@@ -201,7 +223,7 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
                 }
             };
 
-            mTasksDatabaseReference.addChildEventListener(mChildEventListener);
+            mDatabaseReference.addChildEventListener(mChildEventListener);
 
         }
     }

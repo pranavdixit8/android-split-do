@@ -56,13 +56,11 @@ public class GroupTasksActivity extends AppCompatActivity {
 
         }
 
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mGroupDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("tasks");
+
 
         PersonalTasksFragment fragment1 = new PersonalTasksFragment();
 
-        fragment1.setFirebaseDatabase(mFirebaseDatabase);
-        fragment1.setDatabaseReference(mGroupDatabaseReference);
+        fragment1.setGroupFlag(true, mGroupId);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
