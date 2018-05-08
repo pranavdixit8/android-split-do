@@ -34,6 +34,9 @@ import com.google.android.gms.tasks.Task;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.View.GONE;
+import static com.example.pranav.splitdo.R.id.ll_main_content;
+
 public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdapter.TaskViewHolder> {
 
     public static final String TAG = PersonalTasksAdapter.class.getSimpleName();
@@ -44,6 +47,7 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
     private int mPosition =999;
     private boolean mClicked = false;
     private boolean mLongPressed = false;
+    private boolean mDeletePressed = false;
     private GeoDataClient mClient;
 
     private long downTime =0;
@@ -113,7 +117,23 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
         String date = obj.getCreation_time();
         String location = obj.getLocation();
         String createdBy = obj.getCreator();
+        String creatorId = obj.getCreatorID();
         String completedBy = obj.getCompletor();
+        String status = obj.getStatus();
+
+        if(position ==mPosition && mDeletePressed){
+//            holder.itemView.setVisibility(View.GONE);
+
+
+            holder.mTaskView.setVisibility(GONE);
+            mDeletePressed =false;
+            return;
+        }
+
+        if(status.equals("deleted")){
+            holder.itemView.setVisibility(GONE);
+
+        }
 
 
         holder.locationView.setTag(location);
@@ -130,16 +150,18 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
 
 
 
-        if (position == mPosition && holder.mTaskDescriptionView.getPaintFlags() != Paint.STRIKE_THRU_TEXT_FLAG && mLongPressed) {
+
+
+        if (position == mPosition && holder.mTaskDescriptionView.getPaintFlags() != Paint.STRIKE_THRU_TEXT_FLAG && mLongPressed ) {
             holder.mTaskDescriptionView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             Log.d(TAG, "onBindViewHolder: " + holder.mTaskDescriptionView.getPaintFlags());
             holder.mDeleteTask.setVisibility(View.VISIBLE);
             mLongPressed =false;
         }else if (position == mPosition && mLongPressed) {
             holder.mTaskDescriptionView.setPaintFlags(holder.mTaskDescriptionView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-            holder.mDeleteTask.setVisibility(View.GONE);
+            holder.mDeleteTask.setVisibility(GONE);
             mLongPressed =false;
-        }else if(position == mPosition && mClicked && holder.mDetailView.getVisibility() == View.GONE){
+        }else if(position == mPosition && mClicked && holder.mDetailView.getVisibility() == GONE){
 
             Log.d(TAG, "onBindViewHolder: " +" making visible");
             holder.mDetailView.setVisibility(View.VISIBLE);
@@ -147,8 +169,17 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
         }
         else if ( position == mPosition && mClicked && holder.mDetailView.getVisibility() == View.VISIBLE){
             Log.d(TAG, "onBindViewHolder: " + "maing invisible");
-            holder.mDetailView.setVisibility(View.GONE);
+            holder.mDetailView.setVisibility(GONE);
             mClicked =false;
+        }
+
+        if(status.equals("completed") && creatorId.equals(mUid)){
+
+            holder.mTaskDescriptionView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            holder.mDeleteTask.setVisibility(View.VISIBLE);
+        }else if(status.equals("completed")) {
+
+            holder.mTaskDescriptionView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
     }
@@ -163,6 +194,7 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
 
     public class TaskViewHolder extends RecyclerView.ViewHolder {
 
+        LinearLayout mTaskView;
         LinearLayout mGeneralView;
         LinearLayout mDetailView;
 
@@ -176,6 +208,8 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
 
         public TaskViewHolder(View itemView) {
             super(itemView);
+
+            mTaskView =(LinearLayout) itemView.findViewById(R.id.ll_main_content);
 
             mGeneralView = (LinearLayout) itemView.findViewById(R.id.ll_general_description);
             mTaskDescriptionView = (TextView) itemView.findViewById(R.id.taskDescription);
@@ -193,10 +227,7 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
 
             mGeneralView.setOnTouchListener(multiListeners);
 
-
             multiListeners.addOnClickListener(new View.OnTouchListener() {
-
-
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -215,10 +246,20 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                             if(upTime-downTime>500) {
                                 Log.d(TAG, "onTouch: " + (upTime - downTime));
                                 mLongPressed =true;
-                                obj.setCompletorID(mUid);
-                                obj.setCompletor(mUsername);
-                                obj.setStatus("completed");
-                                mLongPressedUpdate.onLongPressed(obj);
+                                mPosition = pos;
+                                if(obj.getStatus().equals("created")) {
+                                    obj.setCompletorID(mUid);
+                                    obj.setCompletor(mUsername);
+                                    obj.setStatus("completed");
+                                    mLongPressedUpdate.onLongPressed(obj);
+                                }
+                                else{
+                                    obj.setCompletorID(null);
+                                    obj.setCompletor("-");
+                                    obj.setStatus("created");
+                                    mLongPressedUpdate.onLongPressed(obj);
+
+                                }
                                 notifyDataSetChanged();
                             }
                             else{
@@ -233,6 +274,46 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                     return false;
                 }
             });
+
+            mDeleteTask.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    view.performClick();
+
+                    int pos = getAdapterPosition();
+                    TaskObject obj = mTasks.get(pos);
+
+                    switch (motionEvent.getAction()){
+                        case MotionEvent.ACTION_DOWN :
+                            downTime=System.currentTimeMillis();
+                            break;
+
+                        case MotionEvent.ACTION_UP :
+                            upTime=System.currentTimeMillis();
+                            if(upTime-downTime>200) {
+
+//                                mDeletePressed =true;
+                                if(obj.getStatus().equals("completed")&&obj.getCreatorID().equals(mUid)) {
+                                    mDeletePressed =true;
+                                    mPosition = pos;
+                                    obj.setStatus("deleted");
+                                    mLongPressedUpdate.onLongPressed(obj);
+
+                                    notifyDataSetChanged();
+                                }
+
+
+                            }
+
+                            return true;
+                    }
+
+
+                    return false;
+                }
+            });
+
+
 
 
             locationView.setOnClickListener(new View.OnClickListener() {

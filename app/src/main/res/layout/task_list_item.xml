@@ -9,137 +9,180 @@
     <!--general description starts-->
 
     <LinearLayout
-        android:id="@+id/ll_general_description"
+        android:id="@+id/ll_main_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="24dp"
-        android:paddingLeft="@dimen/horizontal_margin"
-        android:paddingRight="@dimen/horizontal_margin"
-        android:paddingBottom="0dp">
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll_general_description"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="24dp"
+                android:paddingLeft="@dimen/horizontal_margin"
+                android:paddingRight="@dimen/horizontal_margin"
+                android:paddingBottom="0dp">
+                <TextView
+                    android:id="@+id/taskDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/primary_text_light"
+                    style="@style/TextAppearance.AppCompat.Medium" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/ib_delete_task"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:cursorVisible="true"
+                    android:src="@drawable/ic_clear_black_24dp"
+                    android:background="@drawable/background_circle"
+                    android:visibility="gone"
+                    />
+
+
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+        <!--general description ends here-->
+
+
+        <!--date-->
+
         <TextView
-            android:id="@+id/taskDescription"
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textColor="@android:color/primary_text_light"
-            style="@style/TextAppearance.AppCompat.Medium" />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:textSize="12sp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="bottom|end"/>
 
-        <ImageButton
-            android:id="@+id/ib_delete_task"
+
+        <!--detailed view-->
+
+        <LinearLayout
+            android:id="@+id/ll_detail"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:cursorVisible="true"
-            android:src="@drawable/ic_clear_black_24dp"
-            android:background="@drawable/background_circle"
+            android:orientation="horizontal"
             android:visibility="gone"
-            />
-    </LinearLayout>
+            android:baselineAligned="false">
 
-    <!--general description ends here-->
-
-
- <!--date-->
-
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="bottom|end"/>
-
-
-<!--detailed view-->
-
-    <LinearLayout
-        android:id="@+id/ll_detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:baselineAligned="false">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:id="@+id/tv_location"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_place_black_24dp"
-                />
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_place_black_24dp"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_created_label"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="created by"
+                    />
+                <TextView
+                    android:id="@+id/tv_created"
+                    android:text="-"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tv_completed_label"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="completed by" />
+                <TextView
+                    android:id="@+id/tv_completed"
+                    android:text="-"
+                    android:textSize="16sp"
+                    android:textStyle="italic"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_created_label"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="created by"
-                />
-            <TextView
-                android:id="@+id/tv_created"
-                android:text="-"
-                android:textSize="16sp"
-                android:textStyle="italic"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+        <!--divider-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tv_completed_label"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="completed by" />
-            <TextView
-                android:id="@+id/tv_completed"
-                android:text="-"
-                android:textSize="16sp"
-                android:textStyle="italic"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
 
     </LinearLayout>
 
-    <!--divider-->
-
+    //placeholder
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0dp"
         android:background="@android:color/darker_gray"/>
+
+
+
 
 </LinearLayout>
 
