@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
@@ -36,7 +37,8 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:cursorVisible="true"
-            android:src="@drawable/ic_clear_black_24dp"
+            app:srcCompat="@drawable/ic_clear_black_24dp"
+            android:contentDescription="@string/delete_task_button"
             android:background="@drawable/background_circle"
             android:visibility="gone"
             />
