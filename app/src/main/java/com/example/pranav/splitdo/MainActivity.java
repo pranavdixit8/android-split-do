@@ -29,6 +29,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String POSITION_KEY = "position";
 
     private int FRAGMENT_POSITION = 0;
 
@@ -74,8 +75,17 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         mViewPager = (ViewPager) findViewById(R.id.home_viewpager);
         mTabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+
+        if (savedInstanceState != null) {
+            FRAGMENT_POSITION = savedInstanceState.getInt(POSITION_KEY);
+            mViewPager.setCurrentItem(FRAGMENT_POSITION);
+
+        }
+
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -249,5 +259,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION_KEY, FRAGMENT_POSITION);
     }
 }
