@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.hisham.jazzyviewpagerlib.JazzyViewPager;
 
 import java.util.Arrays;
 
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private FloatingActionButton mGroupFab;
     private FloatingActionButton mTasksFab;
 
-    private ViewPager mViewPager;
+    private JazzyViewPager mViewPager;
     private TabsPagerAdapter mTabsAdapter;
 
     private PersonalTasksFragment mFragment1;
@@ -77,8 +78,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 
 
-        mViewPager = (ViewPager) findViewById(R.id.home_viewpager);
-        mTabsAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mViewPager = (JazzyViewPager) findViewById(R.id.home_viewpager);
+        mViewPager.setTransitionEffect(JazzyViewPager.TransitionEffect.FlipHorizontal);
+        mTabsAdapter = new TabsPagerAdapter(getSupportFragmentManager(), this);
 
         if (savedInstanceState != null) {
             FRAGMENT_POSITION = savedInstanceState.getInt(POSITION_KEY);

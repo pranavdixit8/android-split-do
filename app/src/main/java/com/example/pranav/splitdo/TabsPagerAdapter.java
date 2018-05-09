@@ -1,5 +1,6 @@
 package com.example.pranav.splitdo;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -7,9 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class TabsPagerAdapter extends FragmentPagerAdapter {
     private PersonalTasksFragment mFragment1;
     private GroupsFragment mFragment2;
+    private Context mContext;
 
-    public TabsPagerAdapter(FragmentManager fm){
+    public TabsPagerAdapter(FragmentManager fm, Context context){
         super(fm);
+        mContext = context;
     }
 
     public void setFragments(PersonalTasksFragment fragment1, GroupsFragment fragment2){
@@ -39,9 +42,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position){
             case 0 :
-                return "Personal";
+                return mContext.getResources().getString(R.string.personal_tasks);
             case 1:
-                return "GROUPS";
+                return mContext.getResources().getString(R.string.groups);
             default:
                 return null;
         }
