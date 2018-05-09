@@ -14,8 +14,6 @@ import android.widget.RemoteViews;
 public class SplitdoAppWidget extends AppWidgetProvider {
 
     public static final String TAG =  SplitdoAppWidget.class.getSimpleName();
-
-
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,int count, int appWidgetId) {
 
         CharSequence widgetText = context.getString(R.string.pending_tasks);

@@ -35,6 +35,11 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
 
     public static final String TAG = PersonalTasksFragment.class.getSimpleName();
 
+    public static final String LATITUDE_TOKEN = "lat";
+    public static final String LONGITUDE_TOKEN = "lng";
+    public static final String LOCATION_NAME_TOKEN = "name";
+    public static final String ADDRESS_TOKEN = "address";
+
     ArrayList<TaskObject> mTasks;
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -52,8 +57,6 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
     private  boolean isGroupTasks = false;
 
     private ChildEventListener mChildEventListener;
-
-
 
     public void setTaskList( ArrayList<TaskObject> tasks){
 
@@ -92,10 +95,6 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         View view = inflater.inflate(R.layout.fragment_personal_tasks,container,false);
 
         GeoDataClient geoDataClient = Places.getGeoDataClient(getContext());
-
-
-
-
 
         mUid = getUid();
         mUser = getUser();
@@ -150,10 +149,10 @@ public class PersonalTasksFragment extends Fragment implements PersonalTasksAdap
         Intent intent = new Intent(getContext(),MapMarkerActivity.class);
         Double lat = latLng.latitude;
         Double lng = latLng.longitude;
-        intent.putExtra("lat", lat);
-        intent.putExtra("lng", lng);
-        intent.putExtra("name", name);
-        intent.putExtra("address", address);
+        intent.putExtra(LATITUDE_TOKEN, lat);
+        intent.putExtra(LONGITUDE_TOKEN, lng);
+        intent.putExtra(LOCATION_NAME_TOKEN, name);
+        intent.putExtra(ADDRESS_TOKEN, address);
 
         startActivity(intent);
     }

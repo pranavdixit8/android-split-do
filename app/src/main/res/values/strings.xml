@@ -19,4 +19,7 @@
     <string name="pending_tasks">Pending Tasks</string>
     <string name="select_contacts">Select contact from below :</string>
     <string name="delete_task_button">delete task</string>
+    <string name="signed_in">you are signed in</string>
+    <string name="welcome_message">Welcome, Hi from Split.do</string>
+    <string name="no_location">No Location Specified</string>
 </resources>

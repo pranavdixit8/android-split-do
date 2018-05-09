@@ -16,6 +16,10 @@ import java.util.ArrayList;
 
 public class AddContactsActivity extends AppCompatActivity  implements ContactsAdapter.OnClickContactSelect{
 
+    public static final String NAME_TOKEN = "name";
+    public static final String EMAIL_TOKEN = "email";
+    public static final String UID_TOKEN = "uid";
+
 
     private RecyclerView mRecyclerView;
     private ContactsAdapter mAdapter;
@@ -32,7 +36,6 @@ public class AddContactsActivity extends AppCompatActivity  implements ContactsA
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contacts);
 
-
         mRecyclerView = findViewById(R.id.contacts_recyclerview);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -42,11 +45,9 @@ public class AddContactsActivity extends AppCompatActivity  implements ContactsA
 
         mRecyclerView.setAdapter(mAdapter);
 
-
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         mUserInfoDatabaseReference =  mFirebaseDatabase.getReference().child("userInfo");
-
 
         mChildEventListener = new ChildEventListener() {
             @Override
@@ -54,8 +55,6 @@ public class AddContactsActivity extends AppCompatActivity  implements ContactsA
                 UserObject object = dataSnapshot.getValue(UserObject.class);
                 mAdapter.addObject(object);
                 mContacts.add(object);
-
-
             }
 
             @Override
@@ -81,8 +80,6 @@ public class AddContactsActivity extends AppCompatActivity  implements ContactsA
 
         mUserInfoDatabaseReference.addChildEventListener(mChildEventListener);
 
-
-
     }
 
     @Override
@@ -94,9 +91,9 @@ public class AddContactsActivity extends AppCompatActivity  implements ContactsA
         String uid = obj.getUid();
 
         Intent intent = new Intent();
-        intent.putExtra("name", name);
-        intent.putExtra("email", email);
-        intent.putExtra("uid", uid);
+        intent.putExtra(NAME_TOKEN, name);
+        intent.putExtra(EMAIL_TOKEN, email);
+        intent.putExtra(UID_TOKEN, uid);
         setResult(RESULT_OK, intent);
         finish();
 

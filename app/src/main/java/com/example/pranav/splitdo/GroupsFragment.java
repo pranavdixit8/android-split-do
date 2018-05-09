@@ -61,7 +61,6 @@ public class GroupsFragment extends Fragment {
 
 
 
-
         View view = inflater.inflate(R.layout.fragment_groups,container,false);
 
         mUsername = MainActivity.getUser().getName();
@@ -78,8 +77,6 @@ public class GroupsFragment extends Fragment {
 
         mAdapter = new GroupsAdapter();
         mRecyclerView.setAdapter(mAdapter);
-
-
 
         return view;
 

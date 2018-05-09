@@ -23,11 +23,6 @@ public class GroupTasksActivity extends AppCompatActivity {
     private String mGroupName;
     private String mGroupId;
 
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +32,7 @@ public class GroupTasksActivity extends AppCompatActivity {
 
         if(actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
-
         }
-
 
         mGroupNameTextView = (TextView) findViewById(R.id.tv_group_name);
 
@@ -47,11 +40,10 @@ public class GroupTasksActivity extends AppCompatActivity {
 
         if(intent!= null){
 
-            mGroupName = intent.getStringExtra("name");
+            mGroupName = intent.getStringExtra(GroupsAdapter.GROUP_NAME_TOKEN);
             mGroupNameTextView.setText(mGroupName);
 
-            mGroupId = intent.getStringExtra("groupId");
-
+            mGroupId = intent.getStringExtra(GroupsAdapter.GROUP_ID_TOKEN);
 
 
         }
@@ -72,8 +64,8 @@ public class GroupTasksActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent addTaskIntent = new Intent(GroupTasksActivity.this, AddTaskActivity.class);
-                addTaskIntent.putExtra("groupId", mGroupId);
-                addTaskIntent.putExtra("groupName", mGroupName);
+                addTaskIntent.putExtra(GroupsAdapter.GROUP_ID_TOKEN, mGroupId);
+                addTaskIntent.putExtra(GroupsAdapter.GROUP_NAME_TOKEN, mGroupName);
                 startActivity(addTaskIntent);
             }
         });

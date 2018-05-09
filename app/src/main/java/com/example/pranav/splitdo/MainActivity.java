@@ -105,22 +105,18 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
 
-
-
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-
                 if(user!=null){
                     mUid = user.getUid();
                     mUser = new UserObject(user.getDisplayName(),user.getEmail(), mUid);
                     mUserDatabaseReference = mFirebaseDatabase.getReference().child("userInfo").child(mUid);
                     mUserDatabaseReference.setValue(mUser);
-                    Toast.makeText(MainActivity.this,"you are signed in", Toast.LENGTH_SHORT);
+                    Toast.makeText(MainActivity.this,getString(R.string.signed_in), Toast.LENGTH_SHORT);
                     onSignInStart(user.getDisplayName());
                 }else {
                     onSignOutEnd();
@@ -142,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Welcome, Hi from split.do", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.welcome_message), Toast.LENGTH_SHORT).show();
             } else if (resultCode == RESULT_CANCELED) {
                 finish();
             }

@@ -5,7 +5,6 @@ public class UserObject {
     private String name;
     private String email;
     private String mUid;
-//    private ArrayList<TaskObject> tasks;
 
     public UserObject(){}
 
@@ -13,7 +12,6 @@ public class UserObject {
         this.name = name;
         this.email = email;
         this.mUid = mUid;
-//        this.tasks = tasks;
     }
 
     public String getUid() {

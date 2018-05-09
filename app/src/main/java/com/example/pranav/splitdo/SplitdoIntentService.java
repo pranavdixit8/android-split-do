@@ -62,8 +62,6 @@ public class SplitdoIntentService extends IntentService {
             String action = intent.getAction();
             if(ACTION_GET_PENDING_TASKS_COUNT.equals(action)){
 
-                Log.d(TAG, "onHandleIntent: 1step");
-
                 mChildEventListener = new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -117,7 +115,6 @@ public class SplitdoIntentService extends IntentService {
 
         int count = getPendingTaskCount();
 
-        Log.d(TAG, "onHandleIntent: " + count);
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getBaseContext());
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getBaseContext(), SplitdoAppWidget.class));

@@ -92,10 +92,7 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
 
         }
 
-
-
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-
 
         mUser = getUser();
         mUid = getUid();
@@ -109,8 +106,6 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
                 .enableAutoManage(this, this)
                 .build();
 
-
-
         mLocationNameTextView = (TextView) findViewById(R.id.tv_location_name);
         mLocationAddressTextView = (TextView) findViewById(R.id.tv_address);
 
@@ -118,19 +113,15 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
         mAddedLocationLinearLayout = findViewById(R.id.ll_added_location);
         mGroupNameTextView = findViewById(R.id.tv_group_name);
 
-
-
         Intent intent = getIntent();
-
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-        if(intent!=null && intent.hasExtra("groupName") ){
-
+        if(intent!=null && intent.hasExtra(GroupsAdapter.GROUP_NAME_TOKEN) ){
 
             isGroupTask = true;
-            mGroupName = intent.getStringExtra("groupName");
-            mGroupId = intent.getStringExtra("groupId");
+            mGroupName = intent.getStringExtra(GroupsAdapter.GROUP_NAME_TOKEN);
+            mGroupId = intent.getStringExtra(GroupsAdapter.GROUP_ID_TOKEN);
             mGroupNameTextView.setText(mGroupName);
             mDatabaseReference = mFirebaseDatabase.getReference().child("groups").child(mGroupId).child("tasks").push();
             mTaskId = mDatabaseReference.getKey();
@@ -182,9 +173,6 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
 
         String time = d.format(cal.getTime());
 
-        Log.d(TAG, "onClickAddTask: " + d.format(cal.getTime()));
-
-
         TaskObject taskObject = new TaskObject(input,mTaskId,time, null, null, mUsername,mUid, null, null,null, null, null,"created",mPlaceId);
 
         mDatabaseReference.setValue(taskObject);
@@ -219,7 +207,7 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
         Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_LONG).show();
 
         try {
-            Log.d(TAG, "onAddPlaceClicked: ");
+
             PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
             Intent i = builder.build(this);
             startActivityForResult(i, PLACE_PICKER_REQUEST);
@@ -237,7 +225,6 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.d(TAG, "onActivityResult: ");
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
             Place place = PlacePicker.getPlace(this, data);
             if (place == null) {
@@ -248,12 +235,9 @@ public class AddTaskActivity extends AppCompatActivity implements GoogleApiClien
             String placeAddress = place.getAddress().toString();
             LatLng latLng = place.getLatLng();
 
-            Log.d(TAG, "onActivityResult: Place Name: " + placeName);
-            Log.d(TAG, "onActivityResult: PlaceAddress: " +placeAddress);
             mPlaceId = place.getId();
-            Log.d(TAG, "onActivityResult: " + mPlaceId);
             PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mClient, new String[]{mPlaceId});
-            Log.d(TAG, "onActivityResult: " + placeResult);
+
             placeResult.setResultCallback(new ResultCallback<PlaceBuffer>() {
                 @Override
                 public void onResult(@NonNull PlaceBuffer places) {

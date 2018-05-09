@@ -122,7 +122,6 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
         String status = obj.getStatus();
 
         if(position ==mPosition && mDeletePressed){
-//            holder.itemView.setVisibility(View.GONE);
 
             holder.mTaskView.setVisibility(GONE);
             mDeletePressed =false;
@@ -153,7 +152,6 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
 
         if (position == mPosition && holder.mTaskDescriptionView.getPaintFlags() != Paint.STRIKE_THRU_TEXT_FLAG && mLongPressed ) {
             holder.mTaskDescriptionView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            Log.d(TAG, "onBindViewHolder: " + holder.mTaskDescriptionView.getPaintFlags());
             holder.mDeleteTask.setVisibility(View.VISIBLE);
             mLongPressed =false;
         }else if (position == mPosition && mLongPressed) {
@@ -162,12 +160,11 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
             mLongPressed =false;
         }else if(position == mPosition && mClicked && holder.mDetailView.getVisibility() == GONE){
 
-            Log.d(TAG, "onBindViewHolder: " +" making visible");
             holder.mDetailView.setVisibility(View.VISIBLE);
             mClicked = false;
         }
         else if ( position == mPosition && mClicked && holder.mDetailView.getVisibility() == View.VISIBLE){
-            Log.d(TAG, "onBindViewHolder: " + "maing invisible");
+
             holder.mDetailView.setVisibility(GONE);
             mClicked =false;
         }
@@ -320,7 +317,7 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                 public void onClick(View view) {
                     String id = (String) view.getTag();
                     if(id == null){
-                        Toast.makeText(view.getContext(), "No location specified", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(view.getContext(), view.getContext().getString(R.string.no_location), Toast.LENGTH_SHORT).show();
                         return;}
                     mClient.getPlaceById(id).addOnCompleteListener(new OnCompleteListener<PlaceBufferResponse>() {
                         @Override
@@ -340,11 +337,8 @@ public class PersonalTasksAdapter extends RecyclerView.Adapter<PersonalTasksAdap
                         }
                     });
 
-
-
                 }
             });
-
 
     }
 

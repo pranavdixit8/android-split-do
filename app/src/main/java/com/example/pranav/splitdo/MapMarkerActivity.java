@@ -26,10 +26,10 @@ public class MapMarkerActivity extends AppCompatActivity  implements OnMapReadyC
 
         Intent intent = getIntent();
 
-        mLat = intent.getDoubleExtra("lat", 0);
-        mLng = intent.getDoubleExtra("lng", 0);
-        mName = intent.getStringExtra("name");
-        mAddress = intent.getStringExtra("address");
+        mLat = intent.getDoubleExtra(PersonalTasksFragment.LATITUDE_TOKEN, 0);
+        mLng = intent.getDoubleExtra(PersonalTasksFragment.LONGITUDE_TOKEN, 0);
+        mName = intent.getStringExtra(PersonalTasksFragment.LOCATION_NAME_TOKEN);
+        mAddress = intent.getStringExtra(PersonalTasksFragment.ADDRESS_TOKEN);
 
         mLatLng = new LatLng(mLat,mLng);
 

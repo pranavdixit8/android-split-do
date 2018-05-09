@@ -36,11 +36,8 @@ public class AddGroupActivity extends AppCompatActivity {
     private static final int REQUEST_CONTACT = 1;
 
     private ArrayList<UserObject> mContacts = new ArrayList<>();
-
-
     private EditText mEditTextView;
     private Button mButton;
-
 
     private RecyclerView mRecyclerView;
     private ContactsAdapter mAdapter;
@@ -62,10 +59,6 @@ public class AddGroupActivity extends AppCompatActivity {
     private DatabaseReference mMemberDatabaseReference;
 
     private ChildEventListener mChildEventListener;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,16 +99,9 @@ public class AddGroupActivity extends AppCompatActivity {
         mUserDatabaseReference = mFirebaseDatabase.getReference().child("users").child(mUId).child("groups").child(mGroupId);
 
 
-
-
         mEditTextView = (EditText) findViewById(R.id.et_group_name);
 
-
         mButton = (Button) findViewById((R.id.add_group_button));
-
-
-
-
 
         mEditTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -151,16 +137,14 @@ public class AddGroupActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==REQUEST_CONTACT && resultCode == RESULT_OK){
 
-        String name = data.getStringExtra("name");
-        String email = data.getStringExtra("email");
-        String uid = data.getStringExtra("uid");
+        String name = data.getStringExtra(AddContactsActivity.NAME_TOKEN);
+        String email = data.getStringExtra(AddContactsActivity.EMAIL_TOKEN);
+        String uid = data.getStringExtra(AddContactsActivity.UID_TOKEN);
 
         UserObject obj = new UserObject(name, email, uid);
 
         mContacts.add(obj);
         mAdapter.addObject(obj);
-
-
 
         }
     }
@@ -183,7 +167,6 @@ public class AddGroupActivity extends AppCompatActivity {
 
             String uid = contact.getUid();
             if(!uid.equals(mUId)) {
-                Log.d(TAG, "onClickAddGroup: " + contact.getEmail());
                 Map<String, Object> member = new HashMap<>();
                 member.put(uid, "member");
 
@@ -191,7 +174,6 @@ public class AddGroupActivity extends AppCompatActivity {
                 mMemberDatabaseReference.setValue(groupObject);
                 mGroupMembersReference.updateChildren(member);
             }
-
         }
 
 
@@ -217,14 +199,6 @@ public class AddGroupActivity extends AppCompatActivity {
     }
 
     public void onClickAddMember(View view) {
-
-//        String email = mEmailEditText.getText().toString();
-//
-//        String str = email.split("@")[0];
-//        mEmails.add(str);
-//        mEmailAdapter.addEmail(email);
-//
-//        mEmailEditText.setText("");
 
         try {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);

@@ -11,15 +11,16 @@ import java.util.ArrayList;
 
 public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewHolder> {
 
-    private ArrayList<GroupObject> mGroups = new ArrayList<>();
+    public static final String GROUP_NAME_TOKEN = "name";
+    public static final String GROUP_ID_TOKEN = "groupId";
 
+    private ArrayList<GroupObject> mGroups = new ArrayList<>();
 
     public void clearData(){
         mGroups.clear();
         notifyDataSetChanged();
 
     }
-
 
 
     @Override
@@ -66,8 +67,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.GroupViewH
             String groupId = mGroups.get(position).getGroupID();
             Intent intent = new Intent(v.getContext(), GroupTasksActivity.class);
 
-            intent.putExtra("name", name);
-            intent.putExtra("groupId", groupId);
+            intent.putExtra(GROUP_NAME_TOKEN, name);
+            intent.putExtra(GROUP_ID_TOKEN, groupId);
             v.getContext().startActivity(intent);
         }
     }
