@@ -22,4 +22,8 @@
     <string name="signed_in">you are signed in</string>
     <string name="welcome_message">Welcome, Hi from Split.do</string>
     <string name="no_location">No Location Specified</string>
+    <string name="created_by">created by</string>
+    <string name="empty_placeholder">-</string>
+    <string name="completed_by">completed by</string>
+    <string name="floating_action_button">floating action button</string>
 </resources>

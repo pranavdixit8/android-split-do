@@ -52,6 +52,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:visibility="invisible"
+                android:contentDescription="@string/floating_action_button"
                 />
 
             <android.support.design.widget.FloatingActionButton
@@ -64,7 +65,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fab_add_group"
-                app:srcCompat="@android:drawable/ic_input_add" />
+                app:srcCompat="@android:drawable/ic_input_add"
+                android:contentDescription="@string/floating_action_button"/>
 
 
         </android.support.constraint.ConstraintLayout>

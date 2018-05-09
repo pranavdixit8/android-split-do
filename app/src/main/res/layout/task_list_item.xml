@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     app:srcCompat="@drawable/ic_place_black_24dp"
-                    />
+                    android:contentDescription="@string/location_icon" />
             </LinearLayout>
 
             <LinearLayout
@@ -125,11 +125,11 @@
                     android:textSize="12sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="created by"
+                    android:text="@string/created_by"
                     />
                 <TextView
                     android:id="@+id/tv_created"
-                    android:text="-"
+                    android:text="@string/empty_placeholder"
                     android:textSize="16sp"
                     android:textStyle="italic"
                     android:gravity="center"
@@ -151,10 +151,10 @@
                     android:textSize="12sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="completed by" />
+                    android:text="@string/completed_by" />
                 <TextView
                     android:id="@+id/tv_completed"
-                    android:text="-"
+                    android:text="@string/empty_placeholder"
                     android:textSize="16sp"
                     android:textStyle="italic"
                     android:gravity="center"
