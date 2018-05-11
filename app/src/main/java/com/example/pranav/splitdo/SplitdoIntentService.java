@@ -52,50 +52,53 @@ public class SplitdoIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        if(intent!=null){
+        if(intent!=null) {
 
             mUid = getUid();
             mUser = getUser();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
 
-            mUserTasksDatabaseRef = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
-            String action = intent.getAction();
-            if(ACTION_GET_PENDING_TASKS_COUNT.equals(action)){
+            if (mUid != null) {
+                mUserTasksDatabaseRef = mFirebaseDatabase.getReference().child("users").child(mUid).child("tasks");
+                String action = intent.getAction();
+                if (ACTION_GET_PENDING_TASKS_COUNT.equals(action)) {
 
-                mChildEventListener = new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        TaskObject object = dataSnapshot.getValue(TaskObject.class);
-                        mTasks.add(object);
+                    mChildEventListener = new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            TaskObject object = dataSnapshot.getValue(TaskObject.class);
+                            mTasks.add(object);
 
-                        makeCountUpdate();
-                    }
+                            makeCountUpdate();
+                        }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
 
-                    }
+                        }
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                };
+                        }
+                    };
 
-                mUserTasksDatabaseRef.addChildEventListener(mChildEventListener);
+                    mUserTasksDatabaseRef.addChildEventListener(mChildEventListener);
 
+                }
             }
+
         }
 
     }
